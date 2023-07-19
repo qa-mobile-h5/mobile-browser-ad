@@ -1,0 +1,42 @@
+<?xml version = "1.0" encoding = "UTF-8"?>
+<!DOCTYPE mapper PUBLIC
+        "-//mybatis.org//DTD com.example.Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.group.chat.dao.AnswerGroupDao">
+
+  <resultMap id="answer_group" type="com.azir.rabbit.chat.entity.answer_group.AnswerGroup">
+    <id      property="groupID"          column="group_id"         />
+    <result  property="groupName"        column="group_name"       />
+    <result  property="faceUrl"          column="face_url"         />
+    <result  property="introduction"     column="introduction"     />
+    <result  property="tagList"          column="tag_list"         />
+    <result  property="studentCapacity"  column="student_capacity" />
+    <result  property="studentCount"     column="student_count"    />
+  </resultMap>
+  
+  <select id="selectAnswerGroupByGroupID" resultMap="answer_group">
+    SELECT * 
+    FROM answer_group 
+    WHERE group_id = #{groupID}
+  </select>
+  
+  <select id="selectAnswerGroupList" resultMap="answer_group">
+    SELECT * 
+    FROM answer_group 
+    LIMIT #{startIndex}, #{batchSize}
+  </select>
+
+  <select id="selectAnswerGroupCount" resultType="java.lang.Integer">
+    select count(*)
+    from answer_group
+  </select>
+
+  <insert id="insertAnswerGroup">
+    insert into answer_group
+    (group_id, group_name, ...)
+    values
+    (#{group.groupID}, #{group.groupName} .... )
+  </insert>
+  
+</mapper>

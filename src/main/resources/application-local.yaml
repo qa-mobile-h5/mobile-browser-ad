@@ -1,0 +1,20 @@
+# 程序的主配置文件
+spring:
+  profiles:
+    include: localMysql
+
+## 服务器
+server:
+  ## 域名
+  domain: http://localhost
+  ## 端口
+  port: 14040
+
+## netty
+netty:
+  ## 端口
+  port: 9999
+
+## 本地日志
+log:
+  errorLogHome: /Users/xiezhenjian/Documents/idea/rabbit-backend/src/main/errorlog
