@@ -27,7 +27,7 @@ public class ChatController {
     @ResponseBody
     public String loadAnswerGroupInfo(@RequestBody Map<String, String> requestBody) {
         try {
-            int groupID = Integer.parseInt(requestBody.get("group_id"));
+            int groupID = Integer.parseInt(requestBody.get("group_id")); //原本为group_id(后）
             AnswerGroup group = mLoadAnswerGroupInfoService.loadAnswerGroupInfo(groupID);
             JSONObject jsonObject = group.serialize();
             String json = jsonObject.toString();

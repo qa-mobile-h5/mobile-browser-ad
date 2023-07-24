@@ -17,7 +17,12 @@ public class AnswerGroup {
         return new JSONObject()
                 .put("group_id", groupID)
                 .put("group_name", groupName)
-                .put("face_url", faceUrl);
+                .put("face_url", faceUrl)
+                .put("tagList", tagList)
+                .put("introduction", introduction)
+                .put("student_capacity", studentCapacity)
+                .put("student_count", studentCount)
+                .put("subscribe_label", subscribeLabel);
     }
 
     public Integer getGroupID() {

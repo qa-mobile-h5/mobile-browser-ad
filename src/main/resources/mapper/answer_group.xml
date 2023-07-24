@@ -10,7 +10,7 @@
     <result  property="groupName"        column="group_name"       />
     <result  property="faceUrl"          column="face_url"         />
     <result  property="introduction"     column="introduction"     />
-    <result  property="tagList"          column="tag_list"         />
+    <result  property="tagList"          column="tagList"         />
     <result  property="studentCapacity"  column="student_capacity" />
     <result  property="studentCount"     column="student_count"    />
   </resultMap>
@@ -18,7 +18,7 @@
   <select id="selectAnswerGroupByGroupID" resultMap="answer_group">
     SELECT * 
     FROM answer_group 
-    WHERE group_id = #{groupID}
+    WHERE groupId = #{groupID}
   </select>
   
   <select id="selectAnswerGroupList" resultMap="answer_group">
