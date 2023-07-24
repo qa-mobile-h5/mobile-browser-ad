@@ -5,7 +5,7 @@
 
 <mapper namespace="com.group.chat.dao.AnswerGroupDao">
 
-  <resultMap id="answer_group" type="com.azir.rabbit.chat.entity.answer_group.AnswerGroup">
+  <resultMap id="answer_group" type="com.group.chat.entity.AnswerGroup">
     <id      property="groupID"          column="group_id"         />
     <result  property="groupName"        column="group_name"       />
     <result  property="faceUrl"          column="face_url"         />

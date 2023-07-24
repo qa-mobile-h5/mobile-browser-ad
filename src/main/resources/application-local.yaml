@@ -14,7 +14,3 @@ server:
 netty:
   ## 端口
   port: 9999
-
-## 本地日志
-log:
-  errorLogHome: /Users/xiezhenjian/Documents/idea/rabbit-backend/src/main/errorlog
