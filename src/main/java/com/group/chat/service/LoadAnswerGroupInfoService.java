@@ -2,6 +2,7 @@ package com.group.chat.service;
 
 import com.group.chat.dao.AnswerGroupDao;
 import com.group.chat.entity.AnswerGroup;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,8 +14,10 @@ public class LoadAnswerGroupInfoService {
     private AnswerGroupDao mAnswerGroupDao;
 
     @Transactional(rollbackFor = Exception.class)
-    public AnswerGroup loadAnswerGroupInfo(int groupID) throws Exception {
+    public JSONObject loadAnswerGroupInfo(int groupID) throws Exception {
 
-        return mAnswerGroupDao.selectAnswerGroupByGroupID(groupID);
+        AnswerGroup group = mAnswerGroupDao.selectAnswerGroupByGroupID(groupID);
+
+        return group.serialize();
     }
 }
