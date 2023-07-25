@@ -18,7 +18,7 @@ public class AnswerGroup {
                 .put("group_id", groupID)
                 .put("group_name", groupName)
                 .put("face_url", faceUrl)
-                .put("tagList", tagList)
+                .put("tag_list", tagList)
                 .put("introduction", introduction)
                 .put("student_capacity", studentCapacity)
                 .put("student_count", studentCount)

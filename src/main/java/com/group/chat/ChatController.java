@@ -3,13 +3,11 @@ package com.group.chat;
 import com.group.chat.entity.AnswerGroup;
 import com.group.chat.service.LoadAnswerGroupInfoService;
 import com.group.chat.service.LoadAnswerGroupListService;
+import com.group.chat.service.InsertIntoAnswerGroupService;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
@@ -23,11 +21,14 @@ public class ChatController {
     @Autowired
     private LoadAnswerGroupListService mLoadAnswerGroupListService;
 
+    @Autowired
+    private InsertIntoAnswerGroupService mInsertIntoAnswerGroupService;
+
     @RequestMapping(value = "/load_answer_group_info", method = {RequestMethod.GET, RequestMethod.POST})
     @ResponseBody
     public String loadAnswerGroupInfo(@RequestBody Map<String, String> requestBody) {
         try {
-            int groupID = Integer.parseInt(requestBody.get("group_id")); //原本为group_id(后）
+            int groupID = Integer.parseInt(requestBody.get("group_id"));
             JSONObject jsonObject = mLoadAnswerGroupInfoService.loadAnswerGroupInfo(groupID);
             return jsonObject.toString();
         } catch (Exception e) {
@@ -35,6 +36,19 @@ public class ChatController {
             return null;
         }
     }
+
+    @RequestMapping(value = "/insert_into_answer_group", method = RequestMethod.POST)
+    @ResponseBody
+    public String insertIntoAnswerGroup(@RequestParam("group") AnswerGroup group) {
+        mInsertIntoAnswerGroupService.insertIntoAnswerGroup(group);
+
+        return "insertSuccess";
+    }
+
+//    @ResponseBody
+ //   public String loadAnswerGroupList(@RequestParam("startIndex")int startIndex, @RequestParam("startIndex") int batchSize) {
+ //      = mLoadAnswerGroupListService.loadAnswerGroupList(startIndex,batchSize);
+  //  }
 
 //    @RequestMapping(value = "/load_answer_group_list", method = {RequestMethod.GET, RequestMethod.POST})
 //    @ResponseBody

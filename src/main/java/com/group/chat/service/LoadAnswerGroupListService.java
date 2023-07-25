@@ -14,6 +14,8 @@ public class LoadAnswerGroupListService {
     private AnswerGroupDao mAnswerGroupDao;
 
     public List<AnswerGroup> loadAnswerGroupList(int startIndex, int batchSize) {
+
+      //  AnswerGroup group = mAnswerGroupDao.selectAnswerGroupList(startIndex, batchSize);
         return mAnswerGroupDao.selectAnswerGroupList(startIndex, batchSize);
     }
 }
