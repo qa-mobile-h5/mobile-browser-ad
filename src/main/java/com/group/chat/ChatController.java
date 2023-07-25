@@ -37,9 +37,9 @@ public class ChatController {
         }
     }
 
-    @RequestMapping(value = "/insert_into_answer_group", method = RequestMethod.POST)
+    @RequestMapping(value = "/insert_into_answer_group", method ={RequestMethod.GET, RequestMethod.POST})
     @ResponseBody
-    public String insertIntoAnswerGroup(@RequestParam("group") AnswerGroup group) {
+    public String insertIntoAnswerGroup(@RequestBody AnswerGroup group) {
         mInsertIntoAnswerGroupService.insertIntoAnswerGroup(group);
 
         return "insertSuccess";

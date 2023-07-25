@@ -36,7 +36,7 @@
     insert into answer_group
     (group_id, group_name,face_url,introduction,tag_list,subscriber_lable,student_capacity,student_count)
     values
-    (#{group.groupID}, #{group.groupName}, #{group.faceUrl}, #{group.introduction}, #{group.tagList}, #{group.subscriberLable}, #{group.studentCapacity}, #{group.studentCount})
+    (#{group.groupID}, #{group.groupName}, #{group.faceUrl}, #{group.introduction}, #{group.tagList}, #{group.subscribeLable}, #{group.studentCapacity}, #{group.studentCount})
   </insert>
   
 </mapper>
