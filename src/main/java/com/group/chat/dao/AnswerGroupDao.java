@@ -17,4 +17,6 @@ public interface AnswerGroupDao {
   void insertAnswerGroup(@Param("group") AnswerGroup group);
 
   void deleteAnswerGroupByGroupID(@Param("groupID") int groupID);
+
+  int selectAnswerGroupCount();
 }

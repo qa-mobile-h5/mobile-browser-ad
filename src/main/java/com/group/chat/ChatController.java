@@ -5,6 +5,7 @@ import com.group.chat.service.LoadAnswerGroupInfoService;
 import com.group.chat.service.LoadAnswerGroupListService;
 import com.group.chat.service.InsertIntoAnswerGroupService;
 import com.group.chat.service.DeleteFromAnswerGroupService;
+import com.group.chat.service.LoadAnswerGroupCountService;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -27,6 +28,9 @@ public class ChatController {
 
     @Autowired
     private DeleteFromAnswerGroupService mDeleteFromAnswerGroupService;
+
+    @Autowired
+    private LoadAnswerGroupCountService mLoadAnswerGroupCountService;
 
     @RequestMapping(value = "/load_answer_group_info", method = {RequestMethod.GET, RequestMethod.POST})
     @ResponseBody
@@ -55,6 +59,13 @@ public class ChatController {
         int groupID = Integer.parseInt(requestBody.get("group_id"));
         mDeleteFromAnswerGroupService.deleteFromAnswerGroup(groupID);
         return "deleteSuccess";
+    }
+
+    @RequestMapping(value = "/load_answer_group_count", method ={RequestMethod.GET, RequestMethod.POST})
+    @ResponseBody
+    public Integer loadAnswerGroupCount() {
+        int CountNumber = mLoadAnswerGroupCountService.loadAnswerGroupCount();
+        return CountNumber;
     }
 
 //    @ResponseBody
