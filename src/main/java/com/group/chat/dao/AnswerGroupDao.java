@@ -15,4 +15,6 @@ public interface AnswerGroupDao {
   List<AnswerGroup> selectAnswerGroupList(@Param("startIndex") int startIndex, @Param("batchSize") int batchSize);
 
   void insertAnswerGroup(@Param("group") AnswerGroup group);
+
+  void deleteAnswerGroupByGroupID(@Param("groupID") int groupID);
 }

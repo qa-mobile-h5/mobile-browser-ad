@@ -4,6 +4,7 @@ import com.group.chat.entity.AnswerGroup;
 import com.group.chat.service.LoadAnswerGroupInfoService;
 import com.group.chat.service.LoadAnswerGroupListService;
 import com.group.chat.service.InsertIntoAnswerGroupService;
+import com.group.chat.service.DeleteFromAnswerGroupService;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -24,6 +25,9 @@ public class ChatController {
     @Autowired
     private InsertIntoAnswerGroupService mInsertIntoAnswerGroupService;
 
+    @Autowired
+    private DeleteFromAnswerGroupService mDeleteFromAnswerGroupService;
+
     @RequestMapping(value = "/load_answer_group_info", method = {RequestMethod.GET, RequestMethod.POST})
     @ResponseBody
     public String loadAnswerGroupInfo(@RequestBody Map<String, String> requestBody) {
@@ -43,6 +47,14 @@ public class ChatController {
         mInsertIntoAnswerGroupService.insertIntoAnswerGroup(group);
 
         return "insertSuccess";
+    }
+
+    @RequestMapping(value = "/delete_from_answer_group", method ={RequestMethod.GET, RequestMethod.POST})
+    @ResponseBody
+    public String deleteFromAnswerGroup(@RequestBody Map<String, String> requestBody) {
+        int groupID = Integer.parseInt(requestBody.get("group_id"));
+        mDeleteFromAnswerGroupService.deleteFromAnswerGroup(groupID);
+        return "deleteSuccess";
     }
 
 //    @ResponseBody
