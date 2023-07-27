@@ -5,16 +5,14 @@ import com.group.chat.entity.AnswerGroup;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 @Service
-public class LoadAnswerGroupListService {
+public class UpdateAnswerGroupService {
 
     @Autowired
     private AnswerGroupDao mAnswerGroupDao;
 
-    public List<AnswerGroup> loadAnswerGroupList(int startIndex, int batchSize) {
+    public void updateAnswerGroup(AnswerGroup group){
 
-        return mAnswerGroupDao.selectAnswerGroupList(startIndex, batchSize);
+        mAnswerGroupDao.updateAnswerGroupByGroupID(group);
     }
 }

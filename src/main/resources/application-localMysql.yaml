@@ -6,7 +6,7 @@ mysql:
       ## 数据源类型
       type: com.alibaba.druid.pool.DruidDataSource
       ## 数据库链接URL
-      url: jdbc:mysql://localhost:3306/db_qa_mba?useSSL=false&allowPublicKeyRetrieval=true&serverTimeZone=Asia/Shanghai
+      url: jdbc:mysql://localhost:3306/db_qa_mba?useSSL=false&allowPublicKeyRetrieval=true&characterEncoding=utf-8&allowMultiQueries=true&serverTimeZone=Asia/Shanghai
       ## 数据库账户
       username: root
       ## 数据库密码

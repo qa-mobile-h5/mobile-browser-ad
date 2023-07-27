@@ -8,13 +8,12 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class LoadAnswerGroupListService {
+public class UpdateAnswerGroupListService {
 
     @Autowired
     private AnswerGroupDao mAnswerGroupDao;
 
-    public List<AnswerGroup> loadAnswerGroupList(int startIndex, int batchSize) {
-
-        return mAnswerGroupDao.selectAnswerGroupList(startIndex, batchSize);
+    public void updateAnswerGroupList(List<AnswerGroup> groups){
+        mAnswerGroupDao.updateAnswerGroupListByGroupID(groups);
     }
 }

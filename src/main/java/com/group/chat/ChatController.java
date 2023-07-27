@@ -6,12 +6,15 @@ import com.group.chat.service.LoadAnswerGroupListService;
 import com.group.chat.service.InsertIntoAnswerGroupService;
 import com.group.chat.service.DeleteFromAnswerGroupService;
 import com.group.chat.service.LoadAnswerGroupCountService;
+import com.group.chat.service.UpdateAnswerGroupService;
+import com.group.chat.service.UpdateAnswerGroupListService;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
+import java.util.List;
 
 @Controller
 @RequestMapping("/chat")
@@ -31,6 +34,12 @@ public class ChatController {
 
     @Autowired
     private LoadAnswerGroupCountService mLoadAnswerGroupCountService;
+
+    @Autowired
+    private UpdateAnswerGroupService mUpdateAnswerGroupService;
+
+    @Autowired
+    private UpdateAnswerGroupListService mUpdateAnswerGroupListService;
 
     @RequestMapping(value = "/load_answer_group_info", method = {RequestMethod.GET, RequestMethod.POST})
     @ResponseBody
@@ -67,6 +76,28 @@ public class ChatController {
         int CountNumber = mLoadAnswerGroupCountService.loadAnswerGroupCount();
         return CountNumber;
     }
+
+    @RequestMapping(value = "/update_answer_group", method ={RequestMethod.GET, RequestMethod.POST})
+    @ResponseBody
+    public String updateAnswerGroup(@RequestBody AnswerGroup group) {
+        mUpdateAnswerGroupService.updateAnswerGroup(group);
+
+        return "updateSuccess";
+    }
+
+    @RequestMapping(value = "/update_answer_group_list", method ={RequestMethod.GET, RequestMethod.POST})
+    @ResponseBody
+    public void updateAnswerGroupList(@RequestBody List<AnswerGroup> groups) {
+
+        mUpdateAnswerGroupListService.updateAnswerGroupList(groups);
+    }
+
+    @RequestMapping(value = "/load_answer_group_list", method ={RequestMethod.GET, RequestMethod.POST})
+    @ResponseBody
+    public void loadAnswerGroupList(@RequestParam int startIndex, @RequestParam int batchSize) {
+        mLoadAnswerGroupListService.loadAnswerGroupList(startIndex, batchSize);
+    }
+
 
 //    @ResponseBody
  //   public String loadAnswerGroupList(@RequestParam("startIndex")int startIndex, @RequestParam("startIndex") int batchSize) {

@@ -44,5 +44,29 @@
      from answer_group
      where group_id = #{groupID}
   </delete>
-  
+
+  <update id="updateAnswerGroupByGroupID">
+    update answer_group
+    set group_name=#{group.groupName}, face_url= #{group.faceUrl}, introduction=#{group.introduction}, tag_list=#{group.tagList},
+        subscriber_lable=#{group.subscribeLable}, student_capacity=#{group.studentCapacity}, student_count=#{group.studentCount}
+    where group_id = #{group.groupID}
+  </update>
+
+  <update id="updateAnswerGroupListByGroupID" parameterType="java.util.List">
+      <foreach collection="list" item="group" separator=";">
+        UPDATE answer_group
+        SET group_name = #{group.groupName},
+        face_url = #{group.faceUrl},
+        introduction = #{group.introduction},
+        tag_list = #{group.tagList},
+        subscriber_lable = #{group.subscribeLable},
+        student_capacity = #{group.studentCapacity},
+        student_count = #{group.studentCount}
+        WHERE group_id = #{group.groupID}
+      </foreach>
+  </update>
+
+
+
+
 </mapper>
