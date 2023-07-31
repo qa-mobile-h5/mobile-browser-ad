@@ -15,6 +15,7 @@ public class LoadAnswerGroupListService {
 
     public List<AnswerGroup> loadAnswerGroupList(int startIndex, int batchSize) {
 
+        System.out.println(startIndex);
         return mAnswerGroupDao.selectAnswerGroupList(startIndex, batchSize);
     }
 }

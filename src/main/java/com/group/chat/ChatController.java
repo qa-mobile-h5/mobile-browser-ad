@@ -12,6 +12,7 @@ import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.util.Map;
 import java.util.List;
@@ -92,10 +93,31 @@ public class ChatController {
         mUpdateAnswerGroupListService.updateAnswerGroupList(groups);
     }
 
+//    @RequestMapping(value = "/load_answer_group_list", method ={RequestMethod.GET, RequestMethod.POST})
+ //   @ResponseBody
+ //   public void loadAnswerGroupList(@RequestParam int startIndex, @RequestParam int batchSize) {
+ //       mLoadAnswerGroupListService.loadAnswerGroupList(startIndex, batchSize);
+ //  }
+
     @RequestMapping(value = "/load_answer_group_list", method ={RequestMethod.GET, RequestMethod.POST})
     @ResponseBody
-    public void loadAnswerGroupList(@RequestParam int startIndex, @RequestParam int batchSize) {
-        mLoadAnswerGroupListService.loadAnswerGroupList(startIndex, batchSize);
+    public String loadAnswerGroupList(@RequestBody Map<String, Integer> requestBody) {
+        try {
+            int startIndex = requestBody.get("startIndex");
+            int batchSize = requestBody.get("batchSize");
+
+            // 调用 LoadAnswerGroupListService 的 loadAnswerGroupList 方法获取回答组列表
+            List<AnswerGroup> answerGroups = mLoadAnswerGroupListService.loadAnswerGroupList(startIndex, batchSize);
+
+            // 将回答组列表转换为 JSON 格式的字符串
+            ObjectMapper objectMapper = new ObjectMapper();
+            String jsonResponse = objectMapper.writeValueAsString(answerGroups);
+
+            return jsonResponse;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
 
