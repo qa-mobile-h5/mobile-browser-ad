@@ -23,4 +23,6 @@ public interface AnswerGroupDao {
   void updateAnswerGroupByGroupID(@Param("group") AnswerGroup group);
 
   void updateAnswerGroupListByGroupID(List<AnswerGroup> groups);
+
+  void insertAnswerGroupListByGroupID(List<AnswerGroup> groups);
 }

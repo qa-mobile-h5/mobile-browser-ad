@@ -8,6 +8,7 @@ import com.group.chat.service.DeleteFromAnswerGroupService;
 import com.group.chat.service.LoadAnswerGroupCountService;
 import com.group.chat.service.UpdateAnswerGroupService;
 import com.group.chat.service.UpdateAnswerGroupListService;
+import com.group.chat.service.InsertIntoAnswerGroupListService;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -41,6 +42,9 @@ public class ChatController {
 
     @Autowired
     private UpdateAnswerGroupListService mUpdateAnswerGroupListService;
+
+    @Autowired
+    private InsertIntoAnswerGroupListService mInsertIntoAnswerGroupListService;
 
     @RequestMapping(value = "/load_answer_group_info", method = {RequestMethod.GET, RequestMethod.POST})
     @ResponseBody
@@ -91,6 +95,13 @@ public class ChatController {
     public void updateAnswerGroupList(@RequestBody List<AnswerGroup> groups) {
 
         mUpdateAnswerGroupListService.updateAnswerGroupList(groups);
+    }
+
+    @RequestMapping(value = "/insert_answer_group_list", method ={RequestMethod.GET, RequestMethod.POST})
+    @ResponseBody
+    public void insertIntoAnswerGroupList(@RequestBody List<AnswerGroup> groups) {
+
+        mInsertIntoAnswerGroupListService.insertIntoAnswerGroupList(groups);
     }
 
 //    @RequestMapping(value = "/load_answer_group_list", method ={RequestMethod.GET, RequestMethod.POST})
