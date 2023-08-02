@@ -17,7 +17,7 @@ public class DeleteFromAnswerGroupService{
     private AnswerGroupDao mAnswerGroupDao;
 
     @Transactional (rollbackFor = Exception.class)
-    public ResponseEntity<ServiceResult<Object>> deleteFromAnswerGroup(int groupID) throws Exception{
+    public ServiceResult<Object> deleteFromAnswerGroup(int groupID) {
         ServiceResult<Object> result = new ServiceResult<>();
         try {
             mAnswerGroupDao.deleteAnswerGroupByGroupID(groupID);
@@ -28,6 +28,6 @@ public class DeleteFromAnswerGroupService{
             result.setErr_msg("服务失败");
             e.printStackTrace();
         }
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(result);
+        return result;
     }
 }

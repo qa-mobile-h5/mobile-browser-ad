@@ -2,6 +2,7 @@ package com.group.chat.service;
 
 import com.group.chat.dao.AnswerGroupDao;
 import com.group.chat.entity.AnswerGroup;
+import com.group.chat.entity.ServiceResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,9 +14,17 @@ public class LoadAnswerGroupCountService {
     private AnswerGroupDao mAnswerGroupDao;
 
     @Transactional(rollbackFor = Exception.class)
-    public int loadAnswerGroupCount () throws Exception{
-
-        int CountNumber=mAnswerGroupDao.selectAnswerGroupCount();
-        return CountNumber;
+    public ServiceResult<Object> loadAnswerGroupCount() {
+        ServiceResult<Object> result = new ServiceResult<>();
+        try {
+            result.setResult(mAnswerGroupDao.selectAnswerGroupCount());
+            result.setErr_code(0);
+            result.setErr_msg("");
+        } catch (Exception e) {
+            result.setErr_code(1);
+            result.setErr_msg("服务失败");
+            e.printStackTrace();
+        }
+        return result;
     }
 }
