@@ -4,20 +4,19 @@ import com.group.chat.dao.AnswerGroupDao;
 import com.group.chat.entity.AnswerGroup;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.json.JSONObject;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
-public class LoadAnswerGroupListService {
+public class ReadAnswerGroupService {
 
     @Autowired
     private AnswerGroupDao mAnswerGroupDao;
 
     @Transactional(rollbackFor = Exception.class)
-    public List<AnswerGroup> loadAnswerGroupList(int startIndex, int batchSize) throws Exception{
+    public void readAnswerGroup(int prev_group_id) throws Exception{
 
-        System.out.println(startIndex);
-        return mAnswerGroupDao.selectAnswerGroupList(startIndex, batchSize);
     }
 }

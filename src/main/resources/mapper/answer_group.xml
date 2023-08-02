@@ -32,6 +32,21 @@
     from answer_group
   </select>
 
+  <select id="selectMaxId" resultType="java.lang.Integer">
+    select group_id
+    from answer_group
+    order by group_id desc
+    limit 1
+  </select>
+
+  <select id="selectPrevId" resultType="java.lang.Integer">
+    select group_id
+    from answer_group
+    where group_id &lt; #{prev_group_id}
+    order by group_id desc
+    limit 1
+  </select>
+
   <insert id="insertAnswerGroup">
     insert into answer_group
     (group_id, group_name,face_url,introduction,tag_list,subscriber_lable,student_capacity,student_count)

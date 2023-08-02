@@ -20,6 +20,10 @@ public interface AnswerGroupDao {
 
   int selectAnswerGroupCount();
 
+  int selectMaxId();
+
+  int selectPrevId(@Param("prev_group_id")int prev_group_id);
+
   void updateAnswerGroupByGroupID(@Param("group") AnswerGroup group);
 
   void updateAnswerGroupListByGroupID(List<AnswerGroup> groups);

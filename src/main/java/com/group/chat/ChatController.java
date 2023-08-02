@@ -1,6 +1,13 @@
 package com.group.chat;
 
 import com.group.chat.entity.AnswerGroup;
+import java.util.ArrayList;
+
+import com.group.chat.entity.ServiceResult;
+import org.json.JSONArray;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import java.util.HashMap;
 import com.group.chat.service.LoadAnswerGroupInfoService;
 import com.group.chat.service.LoadAnswerGroupListService;
 import com.group.chat.service.InsertIntoAnswerGroupService;
@@ -9,11 +16,13 @@ import com.group.chat.service.LoadAnswerGroupCountService;
 import com.group.chat.service.UpdateAnswerGroupService;
 import com.group.chat.service.UpdateAnswerGroupListService;
 import com.group.chat.service.InsertIntoAnswerGroupListService;
+import com.group.chat.service.ReadAnswerGroupService;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.group.chat.dao.AnswerGroupDao;
 
 import java.util.Map;
 import java.util.List;
@@ -46,62 +55,197 @@ public class ChatController {
     @Autowired
     private InsertIntoAnswerGroupListService mInsertIntoAnswerGroupListService;
 
+    @Autowired
+    private ReadAnswerGroupService mReadAnswerGroupService;
+
     @RequestMapping(value = "/load_answer_group_info", method = {RequestMethod.GET, RequestMethod.POST})
     @ResponseBody
-    public String loadAnswerGroupInfo(@RequestBody Map<String, String> requestBody) {
+    public ResponseEntity<ServiceResult<Object>> loadAnswerGroupInfo(@RequestBody Map<String, String> requestBody) {
+        ServiceResult<Object> result = new ServiceResult<>();
         try {
             int groupID = Integer.parseInt(requestBody.get("group_id"));
             JSONObject jsonObject = mLoadAnswerGroupInfoService.loadAnswerGroupInfo(groupID);
-            return jsonObject.toString();
+            result.setResult(jsonObject.toString());
+            result.setErr_code(0);
+            result.setErr_msg("");
+            return ResponseEntity.ok().body(result);
         } catch (Exception e) {
+            result.setResult(null);
+            result.setErr_code(1);
+            result.setErr_msg("服务失败");
             e.printStackTrace();
-            return null;
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(result);
         }
     }
 
     @RequestMapping(value = "/insert_into_answer_group", method ={RequestMethod.GET, RequestMethod.POST})
     @ResponseBody
-    public String insertIntoAnswerGroup(@RequestBody AnswerGroup group) {
-        mInsertIntoAnswerGroupService.insertIntoAnswerGroup(group);
+    public ResponseEntity<ServiceResult<Object>> insertIntoAnswerGroup(@RequestBody AnswerGroup group) {
+        ServiceResult<Object> result = new ServiceResult<>();
+        try {
+            mInsertIntoAnswerGroupService.insertIntoAnswerGroup(group);
+            result.setErr_code(0);
+            result.setErr_msg("");
+            return ResponseEntity.ok().body(result);
+        } catch (Exception e) {
+            result.setErr_code(1);
+            result.setErr_msg("服务失败");
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(result);
+        }
 
-        return "insertSuccess";
     }
 
     @RequestMapping(value = "/delete_from_answer_group", method ={RequestMethod.GET, RequestMethod.POST})
     @ResponseBody
-    public String deleteFromAnswerGroup(@RequestBody Map<String, String> requestBody) {
-        int groupID = Integer.parseInt(requestBody.get("group_id"));
-        mDeleteFromAnswerGroupService.deleteFromAnswerGroup(groupID);
-        return "deleteSuccess";
+    public ResponseEntity<ServiceResult<Object>> deleteFromAnswerGroup(@RequestBody Map<String, String> requestBody) {
+     //   try {
+     //       int groupID = Integer.parseInt(requestBody.get("group_id"));
+      //      mDeleteFromAnswerGroupService.deleteFromAnswerGroup(groupID);
+     //       return "deleteSuccess";
+       // } catch (Exception e) {
+       //     e.printStackTrace();
+       //     return null;
+      //  }
+        ServiceResult<Object> result = new ServiceResult<>();
+        try {
+            int groupID = Integer.parseInt(requestBody.get("group_id"));
+            mAnswerGroupDao.deleteAnswerGroupByGroupID(groupID);
+            result.setErr_code(0);
+            result.setErr_msg("");
+            return ResponseEntity.ok().body(result);
+        } catch (Exception e) {
+            result.setErr_code(1);
+            result.setErr_msg("服务失败");
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(result);
+        }
     }
 
     @RequestMapping(value = "/load_answer_group_count", method ={RequestMethod.GET, RequestMethod.POST})
     @ResponseBody
-    public Integer loadAnswerGroupCount() {
-        int CountNumber = mLoadAnswerGroupCountService.loadAnswerGroupCount();
-        return CountNumber;
+    public ResponseEntity<ServiceResult<Object>> loadAnswerGroupCount() {
+        ServiceResult<Object> result = new ServiceResult<>();
+        try {
+            int CountNumber = mLoadAnswerGroupCountService.loadAnswerGroupCount();
+            result.setResult(CountNumber);
+            result.setErr_code(0);
+            result.setErr_msg("");
+            return ResponseEntity.ok().body(result);
+        }catch (Exception e) {
+            result.setResult(null);
+            result.setErr_code(1);
+            result.setErr_msg("服务失败");
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(result);
+        }
     }
 
     @RequestMapping(value = "/update_answer_group", method ={RequestMethod.GET, RequestMethod.POST})
     @ResponseBody
-    public String updateAnswerGroup(@RequestBody AnswerGroup group) {
-        mUpdateAnswerGroupService.updateAnswerGroup(group);
-
-        return "updateSuccess";
+    public ResponseEntity<ServiceResult<Object>> updateAnswerGroup(@RequestBody AnswerGroup group) {
+        ServiceResult<Object> result = new ServiceResult<>();
+        try {
+            mUpdateAnswerGroupService.updateAnswerGroup(group);
+            result.setErr_code(0);
+            result.setErr_msg("");
+            return ResponseEntity.ok().body(result);
+        } catch (Exception e) {
+            result.setErr_code(1);
+            result.setErr_msg("服务失败");
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(result);
+        }
     }
 
     @RequestMapping(value = "/update_answer_group_list", method ={RequestMethod.GET, RequestMethod.POST})
     @ResponseBody
-    public void updateAnswerGroupList(@RequestBody List<AnswerGroup> groups) {
-
-        mUpdateAnswerGroupListService.updateAnswerGroupList(groups);
+    public ResponseEntity<ServiceResult<Object>> updateAnswerGroupList(@RequestBody List<AnswerGroup> groups) {
+        ServiceResult<Object> result = new ServiceResult<>();
+        try {
+            mUpdateAnswerGroupListService.updateAnswerGroupList(groups);
+            result.setErr_code(0);
+            result.setErr_msg("");
+            return ResponseEntity.ok().body(result);
+        }catch (Exception e) {
+            result.setErr_code(1);
+            result.setErr_msg("服务失败");
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(result);
+        }
     }
 
     @RequestMapping(value = "/insert_answer_group_list", method ={RequestMethod.GET, RequestMethod.POST})
     @ResponseBody
-    public void insertIntoAnswerGroupList(@RequestBody List<AnswerGroup> groups) {
+    public ResponseEntity<ServiceResult<Object>> insertIntoAnswerGroupList(@RequestBody List<AnswerGroup> groups) {
+        ServiceResult<Object> result = new ServiceResult<>();
+        try {
+            mInsertIntoAnswerGroupListService.insertIntoAnswerGroupList(groups);
+            int CountNumber = mLoadAnswerGroupCountService.loadAnswerGroupCount();
+            result.setResult(CountNumber);
+            result.setErr_code(0);
+            result.setErr_msg("");
+            return ResponseEntity.ok().body(result);
+        } catch (Exception e) {
+            result.setResult(null);
+            result.setErr_code(1);
+            result.setErr_msg("服务失败");
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(result);
+        }
+    }
 
-        mInsertIntoAnswerGroupListService.insertIntoAnswerGroupList(groups);
+    @Autowired
+    private AnswerGroupDao mAnswerGroupDao;
+
+    public class AnswerGroupListWithInt {
+        private JSONArray AnswerGroups;
+        private int Count;
+
+        public AnswerGroupListWithInt(JSONArray AnswerGroups, int Count) {
+            this.AnswerGroups = AnswerGroups;
+            this.Count = Count;
+        }
+
+        public JSONArray  getAnswerGroups() {
+            return AnswerGroups;
+        }
+
+        public int getCount() {
+            return Count;
+        }
+    }
+    @RequestMapping(value = "/read_answer_group", method ={RequestMethod.GET, RequestMethod.POST})
+    @ResponseBody
+    public JSONArray readAnswerGroup(@RequestBody Map<String, String> requestBody) {
+        int tot=0;
+        int prev_group_id = Integer.parseInt(requestBody.get("prev_group_id"));
+        //List<JSONObject> AnswerGroups = new ArrayList<>();
+        //JSONArray AnswerGroups = new JSONArray();
+        JSONArray AnswerGroups = new JSONArray();
+        while (prev_group_id!=-1&&tot<5) {
+            tot++;
+            ///System.out.println(prev_group_id);
+            if (prev_group_id==0) {
+                prev_group_id=mAnswerGroupDao.selectMaxId();
+            }
+            else {
+                prev_group_id=mAnswerGroupDao.selectPrevId(prev_group_id);
+            }
+
+            try {
+                JSONObject jsonObject = mLoadAnswerGroupInfoService.loadAnswerGroupInfo(prev_group_id);
+              // AnswerGroups.add(jsonObject);
+                AnswerGroups.put(jsonObject);
+             //   System.out.println(AnswerGroups);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        System.out.println(AnswerGroups);
+       // ResponseEntity.status(HttpStatus.OK).body(AnswerGroups.toString());
+       return AnswerGroups;
+       //return new AnswerGroupListWithInt(AnswerGroups,tot);
     }
 
 //    @RequestMapping(value = "/load_answer_group_list", method ={RequestMethod.GET, RequestMethod.POST})
@@ -112,23 +256,28 @@ public class ChatController {
 
     @RequestMapping(value = "/load_answer_group_list", method ={RequestMethod.GET, RequestMethod.POST})
     @ResponseBody
-    public String loadAnswerGroupList(@RequestBody Map<String, Integer> requestBody) {
+    public ResponseEntity<ServiceResult<Object>> loadAnswerGroupList(@RequestBody Map<String, Integer> requestBody) {
+        ServiceResult<Object> result = new ServiceResult<>();
         try {
             int startIndex = requestBody.get("startIndex");
             int batchSize = requestBody.get("batchSize");
-
             // 调用 LoadAnswerGroupListService 的 loadAnswerGroupList 方法获取回答组列表
             List<AnswerGroup> answerGroups = mLoadAnswerGroupListService.loadAnswerGroupList(startIndex, batchSize);
-
             // 将回答组列表转换为 JSON 格式的字符串
             ObjectMapper objectMapper = new ObjectMapper();
             String jsonResponse = objectMapper.writeValueAsString(answerGroups);
-
-            return jsonResponse;
+            result.setResult(jsonResponse);
+            result.setErr_code(0);
+            result.setErr_msg("");
+            return ResponseEntity.ok().body(result);
         } catch (Exception e) {
+            result.setResult(null);
+            result.setErr_code(1);
+            result.setErr_msg("服务失败");
             e.printStackTrace();
-            return null;
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(result);
         }
+
     }
 
 

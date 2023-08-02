@@ -4,6 +4,7 @@ import com.group.chat.dao.AnswerGroupDao;
 import com.group.chat.entity.AnswerGroup;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -13,7 +14,8 @@ public class UpdateAnswerGroupListService {
     @Autowired
     private AnswerGroupDao mAnswerGroupDao;
 
-    public void updateAnswerGroupList(List<AnswerGroup> groups){
+    @Transactional(rollbackFor = Exception.class)
+    public void updateAnswerGroupList(List<AnswerGroup> groups) throws Exception{
         mAnswerGroupDao.updateAnswerGroupListByGroupID(groups);
     }
 }
