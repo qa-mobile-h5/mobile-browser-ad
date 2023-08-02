@@ -19,16 +19,9 @@ public class LoadAnswerGroupListService {
     @Transactional(rollbackFor = Exception.class)
     public ServiceResult<Object> loadAnswerGroupList(int startIndex, int batchSize){
         ServiceResult<Object> result = new ServiceResult<>();
-        try {
-            result.setResult(mAnswerGroupDao.selectAnswerGroupList(startIndex, batchSize));
-            result.setErr_code(0);
-            result.setErr_msg("");
-        } catch (Exception e) {
-            result.setResult(null);
-            result.setErr_code(1);
-            result.setErr_msg("服务失败");
-            e.printStackTrace();
-        }
+        result.setResult(mAnswerGroupDao.selectAnswerGroupList(startIndex, batchSize));
+        result.setErr_code(0);
+        result.setErr_msg("");
         return result;
        // return mAnswerGroupDao.selectAnswerGroupList(startIndex, batchSize);
     }

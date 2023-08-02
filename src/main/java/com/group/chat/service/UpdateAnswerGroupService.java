@@ -16,15 +16,9 @@ public class UpdateAnswerGroupService {
     @Transactional(rollbackFor = Exception.class)
     public ServiceResult<Object> updateAnswerGroup(AnswerGroup group) {
         ServiceResult<Object> result = new ServiceResult<>();
-        try {
-            mAnswerGroupDao.updateAnswerGroupByGroupID(group);
-            result.setErr_code(0);
-            result.setErr_msg("");
-        } catch (Exception e) {
-            result.setErr_code(1);
-            result.setErr_msg("服务失败");
-            e.printStackTrace();
-        }
+        mAnswerGroupDao.updateAnswerGroupByGroupID(group);
+        result.setErr_code(0);
+        result.setErr_msg("");
         return result;
     }
 }

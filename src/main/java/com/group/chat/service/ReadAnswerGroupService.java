@@ -18,9 +18,8 @@ public class ReadAnswerGroupService {
     private AnswerGroupDao mAnswerGroupDao;
 
     @Transactional(rollbackFor = Exception.class)
-    public ServiceResult<Object> readAnswerGroup(int prev_group_id) {
+    public ServiceResult<Object> readAnswerGroup(int prev_group_id) throws Exception {
         ServiceResult<Object> result = new ServiceResult<>();
-        try {
             int tot=0;
             JSONArray AnswerGroups = new JSONArray();
             while (prev_group_id!=-1&&tot<5) {
@@ -42,11 +41,6 @@ public class ReadAnswerGroupService {
             result.setResult(jsonObject.toString());
             result.setErr_code(0);
             result.setErr_msg("");
-        } catch (Exception e) {
-            result.setErr_code(1);
-            result.setErr_msg("服务失败");
-            e.printStackTrace();
-        }
         return result;
     }
 }

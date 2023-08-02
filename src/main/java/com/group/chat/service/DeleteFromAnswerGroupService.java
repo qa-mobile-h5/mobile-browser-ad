@@ -17,17 +17,11 @@ public class DeleteFromAnswerGroupService{
     private AnswerGroupDao mAnswerGroupDao;
 
     @Transactional (rollbackFor = Exception.class)
-    public ServiceResult<Object> deleteFromAnswerGroup(int groupID) {
+    public ServiceResult<Object> deleteFromAnswerGroup(int groupID) throws Exception{
         ServiceResult<Object> result = new ServiceResult<>();
-        try {
-            mAnswerGroupDao.deleteAnswerGroupByGroupID(groupID);
-            result.setErr_code(0);
-            result.setErr_msg("");
-        } catch (Exception e) {
-            result.setErr_code(1);
-            result.setErr_msg("服务失败");
-            e.printStackTrace();
-        }
+        mAnswerGroupDao.deleteAnswerGroupByGroupID(groupID);
+        result.setErr_code(0);
+        result.setErr_msg("");
         return result;
     }
 }

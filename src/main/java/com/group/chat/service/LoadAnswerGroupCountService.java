@@ -16,15 +16,9 @@ public class LoadAnswerGroupCountService {
     @Transactional(rollbackFor = Exception.class)
     public ServiceResult<Object> loadAnswerGroupCount() {
         ServiceResult<Object> result = new ServiceResult<>();
-        try {
-            result.setResult(mAnswerGroupDao.selectAnswerGroupCount());
-            result.setErr_code(0);
-            result.setErr_msg("");
-        } catch (Exception e) {
-            result.setErr_code(1);
-            result.setErr_msg("服务失败");
-            e.printStackTrace();
-        }
+        result.setResult(mAnswerGroupDao.selectAnswerGroupCount());
+        result.setErr_code(0);
+        result.setErr_msg("");
         return result;
     }
 }

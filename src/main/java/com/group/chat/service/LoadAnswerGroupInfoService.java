@@ -24,17 +24,10 @@ public class LoadAnswerGroupInfoService {
    @Transactional(rollbackFor = Exception.class)
     public ServiceResult<Object> loadAnswerGroupInfo(int groupID) throws Exception{
         ServiceResult<Object> result = new ServiceResult<>();
-        try {
-            JSONObject jsonObject = mAnswerGroupDao.selectAnswerGroupByGroupID(groupID).serialize();
-            result.setResult(jsonObject.toString());
-            result.setErr_code(0);
-            result.setErr_msg("");
-        } catch (Exception e) {
-            result.setResult(null);
-            result.setErr_code(1);
-            result.setErr_msg("服务失败");
-            e.printStackTrace();
-        }
+        JSONObject jsonObject = mAnswerGroupDao.selectAnswerGroupByGroupID(groupID).serialize();
+        result.setResult(jsonObject.toString());
+        result.setErr_code(0);
+        result.setErr_msg("");
         return result;
     }
 }
