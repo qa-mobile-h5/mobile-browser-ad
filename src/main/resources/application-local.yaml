@@ -1,8 +1,10 @@
-# 程序的主配置文件
 spring:
   profiles:
     include: localMysql
 
+## Redis连接配置
+spring.redis.host: localhost
+spring.redis.port: 6379
 ## 服务器
 server:
   ## 域名
