@@ -2,7 +2,7 @@ package com.group.chat.service;
 
 import com.group.chat.dao.AnswerGroupDao;
 import com.group.chat.entity.AnswerGroup;
-import com.group.chat.entity.ServiceResult;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,11 +14,11 @@ public class UpdateAnswerGroupService {
     private AnswerGroupDao mAnswerGroupDao;
 
     @Transactional(rollbackFor = Exception.class)
-    public ServiceResult<Object> updateAnswerGroup(AnswerGroup group) {
-        ServiceResult<Object> result = new ServiceResult<>();
+    public JSONObject updateAnswerGroup(AnswerGroup group) {
+        JSONObject result = new JSONObject();
         mAnswerGroupDao.updateAnswerGroupByGroupID(group);
-        result.setErr_code(0);
-        result.setErr_msg("");
+        result.put("err_code", 0);
+        result.put("err_msg", "");
         return result;
     }
 }

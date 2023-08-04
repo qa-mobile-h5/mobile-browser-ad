@@ -20,6 +20,7 @@
     FROM answer_group 
     WHERE group_id = #{groupID}
   </select>
+
   
   <select id="selectAnswerGroupList" resultMap="answer_group">
     SELECT * 
