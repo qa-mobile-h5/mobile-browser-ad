@@ -18,6 +18,7 @@ public class LoadAnswerGroupListService {
     @Transactional(rollbackFor = Exception.class)
     public JSONObject loadAnswerGroupList(int startIndex, int batchSize){
         JSONObject result = new JSONObject();
+        result.put("result",mAnswerGroupDao.selectAnswerGroupList(startIndex,batchSize));
         result.put("err_code", 0);
         result.put("err_msg", "");
         return result;
