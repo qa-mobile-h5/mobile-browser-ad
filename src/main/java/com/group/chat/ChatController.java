@@ -22,6 +22,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.group.chat.dao.AnswerGroupDao;
+import com.group.chat.service.TestService;
 
 import java.util.Map;
 import java.util.List;
@@ -53,6 +54,9 @@ public class ChatController {
 
     @Autowired
     private InsertIntoAnswerGroupListService mInsertIntoAnswerGroupListService;
+
+    @Autowired
+    private TestService mTestService;
 
     @Autowired
     private ReadAnswerGroupService mReadAnswerGroupService;
@@ -232,6 +236,24 @@ public class ChatController {
             return result.toString();
         }
         }
+
+    @RequestMapping(value = "/test", method ={RequestMethod.GET, RequestMethod.POST})
+    @ResponseBody
+    public String test(@RequestBody AnswerGroup group) throws Exception {
+
+        JSONObject result;
+        try{
+            result = new JSONObject();
+            mTestService.test();
+            return result.toString();
+        }  catch (Exception e) {
+            result = new JSONObject();
+            result.put("error_code",1);
+            result.put("err_msg","服务失败");
+            e.printStackTrace();
+            return result.toString();
+        }
+    }
     /*    int tot=0;
         int prev_group_id = Integer.parseInt(requestBody.get("prev_group_id"));
         JSONArray AnswerGroups = new JSONArray();
