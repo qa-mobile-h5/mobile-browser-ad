@@ -1,13 +1,13 @@
 CREATE DATABASE db_qa_mba;
 
 CREATE TABLE answer_group (
-  groupId INT NOT NULL AUTO_INCREMENT,
-  groupName VARCHAR(255),
-  faceUrl VARCHAR(255),
+  group_id INT NOT NULL AUTO_INCREMENT,
+  group_name VARCHAR(255),
+  face_url VARCHAR(255),
   introduction VARCHAR(255),
-	tagList VARCHAR(255),
-	subscriberLable VARCHAR(255),
-	studentCapacity INT,
-	studentCount INT,
-	PRIMARY KEY (groupId)
+	tag_list VARCHAR(255),
+	subscribe_label VARCHAR(255),
+	student_capacity INT,
+	student_count INT,
+	PRIMARY KEY (group_id)
 );

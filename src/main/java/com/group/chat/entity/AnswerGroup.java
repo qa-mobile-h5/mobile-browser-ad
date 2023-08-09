@@ -11,7 +11,7 @@ public class AnswerGroup {
     private String  tagList;
     private Integer studentCapacity;
     private Integer studentCount;
-    private String  subscribeLable;
+    private String  subscribeLabel;
 
     public JSONObject serialize() throws Exception {
         return new JSONObject()
@@ -22,7 +22,7 @@ public class AnswerGroup {
                 .put("introduction", introduction)
                 .put("student_capacity", studentCapacity)
                 .put("student_count", studentCount)
-                .put("subscriber_lable", subscribeLable);
+                .put("subscribe_label", subscribeLabel);
     }
 
     public Integer getGroupID() {
@@ -81,11 +81,25 @@ public class AnswerGroup {
         this.studentCount = studentCount;
     }
 
-    public String getSubscribeLable() {
-        return subscribeLable;
+    public String getSubscribeLabel() {
+        return subscribeLabel;
     }
 
-    public void setSubscribeLable(String subscribeLable) {
-        this.subscribeLable = subscribeLable;
+    public void setSubscribeLabel(String subscribeLabel) {
+        this.subscribeLabel = subscribeLabel;
+    }
+
+    @Override
+    public String toString() {
+        return "AnswerGroup{" +
+                "groupID=" + groupID +
+                ", groupName='" + groupName + '\'' +
+                ", faceUrl='" + faceUrl + '\'' +
+                ", introduction='" + introduction + '\'' +
+                ", tagList='" + tagList + '\'' +
+                ", studentCapacity=" + studentCapacity +
+                ", studentCount=" + studentCount +
+                ", subscribeLabel='" + subscribeLabel + '\'' +
+                '}';
     }
 }

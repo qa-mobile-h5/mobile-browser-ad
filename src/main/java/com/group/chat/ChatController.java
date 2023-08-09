@@ -87,6 +87,7 @@ public class ChatController {
       JSONObject result;
       try {
           result = mLoadAnswerGroupInfoService.loadAnswerGroupInfo(groupID);
+          System.out.println("Received group_id: " + result);
           return result.toString();
       }catch (Exception e) {
           result = new JSONObject();
@@ -108,7 +109,7 @@ public class ChatController {
             return result.toString();
         }  catch (Exception e) {
             result = new JSONObject();
-            result.put("error_code",1);
+           result.put("error_code",1);
             result.put("err_msg","服务失败");
             e.printStackTrace();
             return result.toString();
