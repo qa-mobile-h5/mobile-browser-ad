@@ -26,7 +26,7 @@
   <select id="selectAnswerGroupList" resultMap="answer_group">
     SELECT * 
     FROM answer_group 
-    LIMIT #{startIndex}, #{batchSize}
+    LIMIT #{startIndex}, 5
   </select>
 
   <select id="selectAnswerGroupCount" resultType="java.lang.Integer">
@@ -88,7 +88,7 @@
         face_url = #{group.faceUrl},
         introduction = #{group.introduction},
         tag_list = #{group.tagList},
-        subscriber_label = #{group.subscribeLabel},
+        subscribe_label = #{group.subscribeLabel},
         student_capacity = #{group.studentCapacity},
         student_count = #{group.studentCount}
       </foreach>

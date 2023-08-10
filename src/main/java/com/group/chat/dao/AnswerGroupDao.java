@@ -12,7 +12,7 @@ public interface AnswerGroupDao {
 
   AnswerGroup selectAnswerGroupByGroupID(@Param("groupID") int groupID);
 
-  List<AnswerGroup> selectAnswerGroupList(@Param("startIndex") int startIndex, @Param("batchSize") int batchSize);
+  List<AnswerGroup> selectAnswerGroupList(@Param("startIndex") int startIndex);
 
   void insertAnswerGroup(@Param("group") AnswerGroup group);
 

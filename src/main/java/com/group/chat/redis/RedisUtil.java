@@ -1,8 +1,10 @@
 package com.group.chat.redis;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.configurationprocessor.json.JSONArray;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
@@ -90,23 +92,42 @@ public class RedisUtil {
         return intList;
     }
 
+  //  public void cacheAnswerGroups(List<AnswerGroup> answerGroups) throws JsonProcessingException {
+   //     for (AnswerGroup group : answerGroups) {
+   //         String json = objectMapper.writeValueAsString(group);
+  //          mStringRedisTemplate.opsForHash().put("answerGroups", group.getGroupID(), json);
+  //      }
+   // }
+
     public void cacheAnswerGroups(List<AnswerGroup> answerGroups) throws JsonProcessingException {
-        for (AnswerGroup group : answerGroups) {
-            String json = objectMapper.writeValueAsString(group);
-            mStringRedisTemplate.opsForHash().put("answerGroups", group.getGroupID(), json);
-        }
+        String json = objectMapper.writeValueAsString(answerGroups);
+        mStringRedisTemplate.opsForValue().set("answerGroups", json);
     }
 
-    public Map<String, AnswerGroup> getAnswerGroups(List<String> groupIds) throws JsonProcessingException {
-        Map<String, AnswerGroup> resultMap = new HashMap<>();
-        for (String groupId : groupIds) {
-            String json = mStringRedisTemplate.opsForValue().get(groupId);
-            if (json != null) {
-                AnswerGroup answerGroup = objectMapper.readValue(json, AnswerGroup.class);
-                resultMap.put(groupId, answerGroup);
+ //   public Map<String, AnswerGroup> getAnswerGroups(List<String> groupIds) throws JsonProcessingException {
+  //      Map<String, AnswerGroup> resultMap = new HashMap<>();
+   //     for (String groupId : groupIds) {
+   //         String json = mStringRedisTemplate.opsForValue().get(groupId);
+   //         if (json != null) {
+   //             AnswerGroup answerGroup = objectMapper.readValue(json, AnswerGroup.class);
+  //              resultMap.put(groupId, answerGroup);
+  //          }
+  //      }
+   //     return resultMap;
+  //  }
+
+    public JSONArray getAnswerGroups(List<String> groupIDs) {
+        String json = mStringRedisTemplate.opsForValue().get(groupIDs);
+        JSONArray resultMap = new JSONArray();
+        if (json != null) {
+            try {
+                List<AnswerGroup> answerGroups = objectMapper.readValue(json, new TypeReference<List<AnswerGroup>>() {});
+                resultMap.put(answerGroups);
+            } catch (JsonProcessingException e) {
+                // Handle exception
             }
         }
-        return resultMap;
+        return new JSONArray();
     }
     /**
      * 判断当前Redis缓存中是否有Key

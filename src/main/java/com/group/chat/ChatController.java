@@ -87,7 +87,7 @@ public class ChatController {
       JSONObject result;
       try {
           result = mLoadAnswerGroupInfoService.loadAnswerGroupInfo(groupID);
-          System.out.println("Received group_id: " + result);
+         // System.out.println("Received group_id: " + result);
           return result.toString();
       }catch (Exception e) {
           result = new JSONObject();
@@ -298,10 +298,10 @@ public class ChatController {
     @ResponseBody
     public String loadAnswerGroupList(@RequestBody Map<String, Integer> requestBody) {
         int startIndex = requestBody.get("startIndex");
-        int batchSize = requestBody.get("batchSize");
+    //    int batchSize = requestBody.get("batchSize");
         JSONObject result;
         try{
-            result= mLoadAnswerGroupListService.loadAnswerGroupList(startIndex, batchSize);
+            result= mLoadAnswerGroupListService.loadAnswerGroupList(startIndex);
             return result.toString();
         }catch (Exception e) {
             result = new JSONObject();
