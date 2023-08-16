@@ -23,8 +23,33 @@ public class ReadAnswerGroupService {
 
     @Transactional(rollbackFor = Exception.class)
     public JSONObject readAnswerGroup(int prev_group_id) throws Exception {
+        if (prev_group_id == 0) {
+            prev_group_id = mAnswerGroupDao.selectMaxId();
+        } else {
+            prev_group_id = mAnswerGroupDao.selectPrevId(prev_group_id);
+        }
         JSONObject result = new JSONObject();
-            int tot=0;
+        //从缓存中读取6个answergroup，从缓存中intlist中读取6个，并比较最后一位是否相等
+        // if (groupID == intlist<末位>) {
+        // 直接getAnswerGroups
+        // }
+        // else{
+        List<AnswerGroup> groups = mAnswerGroupDao.readAnswerGroup(prev_group_id);
+        //cacheAnswerGroups();
+        // }
+        if (groups.size() <= 5) {
+            //  输出相应数量的数据
+            //  返回结束符
+        } else {
+            //  输出5个数据
+            //  更新prev_group_id
+        }
+
+
+
+
+
+         /*   int tot=0;
             JSONArray AnswerGroups = new JSONArray();
             while (prev_group_id!=-1&&tot<5) {
                 tot++;
@@ -57,7 +82,7 @@ public class ReadAnswerGroupService {
             result.put("prev_group_id", prev_group_id);
          result.put("err_code", 0);
          result.put("err_msg", "");
-            System.out.println(result);
+            System.out.println(result);*/
         return result;
     }
 }
