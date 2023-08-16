@@ -1,0 +1,58 @@
+1、数据库拿数据，需要一次性拿数据
+prevGroupID
+
+2、redis：
+（1）1：group1，2：group2， ...
+（2）multiget(keys)   multiget(String...)   String... value
+（3）multiset(map)
+
+3、从数据库拿一个groupID list 存到redis里去，
+key: "GroupIDList"  Zset
+
+
+key：123
+value： array [group1, group2, group3]
+
+key：213
+value: array [group2, group1, group3]
+
+1
+2
+3
+
+key：123
+
+
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+..
+9999
+10000
+
+
+prev_group_id 0
+
+10000 9999 9998 9997 9996 9995 9994 9993  8000 7999 7998 7997 7996
+
+prev_group_id 9998
+
+prev_group_id 8000    8000 7999 7998 7997 7996
+
+
+10 9 8 7 6 5 4 3 2 1 0
+
+
+
+
+
+where group_id < 9
+order by group_id desc

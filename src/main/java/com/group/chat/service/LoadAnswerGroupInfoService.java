@@ -32,8 +32,8 @@ public class LoadAnswerGroupInfoService {
     public JSONObject loadAnswerGroupInfo(int groupID) throws Exception{
        JSONObject result = new JSONObject();
      //  System.out.println("Received group_id: " + groupID);
-        JSONObject jsonObject = mAnswerGroupDao.selectAnswerGroupByGroupID(groupID).serialize();
-        result.put("result",jsonObject.toString());
+       JSONObject jsonObject = mAnswerGroupDao.selectAnswerGroupByGroupID(groupID).serialize();
+       result.put("result",jsonObject.toString());
        result.put("err_code", 0);
        result.put("err_msg", "");
 
@@ -51,16 +51,16 @@ public class LoadAnswerGroupInfoService {
        List<Integer> ans=mRedisUtil.getDescendingIntList("list");
        System.out.println(ans);*/
 
-      List<AnswerGroup> groups=new ArrayList();
+       List<AnswerGroup> groups = new ArrayList();
        groups.add(group);
        groups.add(group);
        groups.add(group);
-       List<String> qwe= new ArrayList();
+       List<String> qwe = new ArrayList();
        qwe.add("3");
        qwe.add("3");
        qwe.add("3");
        mRedisUtil.cacheAnswerGroups(groups);
-       JSONArray jsonarr=mRedisUtil.getAnswerGroups(qwe);
+       JSONArray jsonarr = mRedisUtil.getAnswerGroups(qwe);
        System.out.println(jsonarr);
         return result;
     }

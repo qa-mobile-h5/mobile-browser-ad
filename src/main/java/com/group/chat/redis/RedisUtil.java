@@ -59,9 +59,11 @@ public class RedisUtil {
 
 
     public void cacheAnswerGroup(String groupID, AnswerGroup answerGroup) {
+        String key = "AnswerGroup::" + answerGroup.getGroupID().toString();
         Jackson2JsonRedisSerializer<AnswerGroup> serializer = new Jackson2JsonRedisSerializer<>(AnswerGroup.class);
         byte[] serializedValue = serializer.serialize(answerGroup);
-       mStringRedisTemplate.opsForValue().set(groupID, new String(serializedValue));
+        String value = new String(serializedValue);
+        mStringRedisTemplate.opsForValue().set(key, value);
        // String key = "answerGroup:" + answerGroup.getGroupID();
       //  mStringRedisTemplate.opsForValue().set(key, answerGroup.serialize());
     }
@@ -82,7 +84,46 @@ public class RedisUtil {
         }
     }
 
-    public List<Integer> getDescendingIntList(String key) {
+    public List<Integer> getDescendingIntList(String listKey) {
+
+        String listKey = "GroupIDList";  // zset, 1,2,3,4,5,6...
+        [
+        {
+            "value": "1",
+            "score": 1
+        }
+        {
+            "value": "2",
+            "score": 2,
+        }
+        ...
+        {
+            "value": "6",
+            "score": 6
+        }
+        ]
+
+
+        Set<String> set = mStringRedisTemplate.opsForZSet().range(listKey, 0, -1);
+        ["1", "2", "3", ...，"6"];
+
+
+        mStringRedisTemplate.opsForZSet().add(listKey, "11", 11);
+
+
+        List<Integer> result = new ArrayList<>();
+
+        Iterator<String> iterator = set.iterator();
+        while (iterator.hasNext()) {
+            String value = iterator.next();
+            int i = Integer.parseInt(value);
+            result.add(i);
+        }
+        // 1 2 3 4 5 6
+        return result;
+
+
+
         ZSetOperations<String, String> zSetOperations = mStringRedisTemplate.opsForZSet();
         Set<String> stringSet = zSetOperations.reverseRange(key, 0, -1);
         List<Integer> intList = new ArrayList<>();
@@ -100,6 +141,23 @@ public class RedisUtil {
    // }
 
     public void cacheAnswerGroups(List<AnswerGroup> answerGroups) throws JsonProcessingException {
+        Map<String, String> map = new HashMap<>();
+        String key1 = "AnswerGroup::1";
+        String key2 = "AnswerGroup::2";
+        String value1 = "{groupID: 1}";
+        String value2 = "{groupID: 2}";
+        map.put(key1, value1);
+        map.put(key2, value2);
+        mStringRedisTemplate.opsForValue().multiSet(map);
+
+        for (AnswerGroup group: answerGroups) {
+            String key = "AnswerGroup::" + group.getGroupID();
+            String value = jackson();
+            map.put(key, value);
+        }
+
+        mStringRedisTemplate.opsForValue().multiSet(map);
+
         String json = objectMapper.writeValueAsString(answerGroups);
         mStringRedisTemplate.opsForValue().set("answerGroups", json);
     }
@@ -129,6 +187,47 @@ public class RedisUtil {
         }
         return new JSONArray();
     }
+
+
+    public JSONArray getAnswerGroups() {
+        String listkey = "GroupIDList";
+        List<Integer> idList = getDescendingIntList(listkey);
+
+        List<String> keys = new ArrayList<>();
+        for (int id: idList) {
+            String key = "AnswerGroup::" + id;
+            keys.add(key);
+        }
+        List<String> values = mStringRedisTemplate.opsForValue().multiGet(keys);
+
+        List<AnswerGroup> result = new ArrayList<>();
+        for (String value: values) {
+            AnswerGroup group = 反序列化(value);
+            result.add(group);
+        }
+
+        Integer.parseInt(str);  "123" -> 123
+        Long.parseLong(str);
+        Double.parseDouble(str);
+        Boolean.parseBoolean(str);
+
+        return result;
+
+
+        String json = mStringRedisTemplate.opsForValue().get(groupIDs);
+        JSONArray resultMap = new JSONArray();
+        if (json != null) {
+            try {
+                List<AnswerGroup> answerGroups = objectMapper.readValue(json, new TypeReference<List<AnswerGroup>>() {});
+                resultMap.put(answerGroups);
+            } catch (JsonProcessingException e) {
+                // Handle exception
+            }
+        }
+        return new JSONArray();
+    }
+
+
     /**
      * 判断当前Redis缓存中是否有Key
      *
