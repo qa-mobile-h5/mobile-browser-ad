@@ -75,21 +75,23 @@ public class RedisUtil {
         return null;
     }
 
-    public void cacheDescendingIntList(String key, List<Integer> intList) {
-        ZSetOperations<String, String> zSetOperations = mStringRedisTemplate.opsForZSet();
+    public void cacheDescendingIntList(Map<String,String> intList) {
+      /*  ZSetOperations<String, String> zSetOperations = mStringRedisTemplate.opsForZSet();
         for (Integer num : intList) {
             zSetOperations.add(key, String.valueOf(num), num);
-        }
+        }*/
+        mStringRedisTemplate.opsForValue().multiSet(intList);
     }
 
-    public List<Integer> getDescendingIntList(String key) {
-        ZSetOperations<String, String> zSetOperations = mStringRedisTemplate.opsForZSet();
+    public List<Integer> getDescendingIntList(Map<String,String> intList) {
+        List<Integer> list =mStringRedisTemplate.opsForValue().multiGet(intList);
+      /*  ZSetOperations<String, String> zSetOperations = mStringRedisTemplate.opsForZSet();
         Set<String> stringSet = zSetOperations.reverseRange(key, 0, -1);
         List<Integer> intList = new ArrayList<>();
         for (String numStr : stringSet) {
             intList.add(Integer.parseInt(numStr));
-        }
-        return intList;
+        }*/
+        return list;
     }
 
   //  public void cacheAnswerGroups(List<AnswerGroup> answerGroups) throws JsonProcessingException {
@@ -99,9 +101,10 @@ public class RedisUtil {
   //      }
    // }
 
-    public void cacheAnswerGroups(List<AnswerGroup> answerGroups) throws JsonProcessingException {
-        String json = objectMapper.writeValueAsString(answerGroups);
-        mStringRedisTemplate.opsForValue().set("answerGroups", json);
+    public void cacheAnswerGroups(Map<String,String> answerGroups) throws JsonProcessingException {
+       // String json = objectMapper.writeValueAsString(answerGroups);
+       // mStringRedisTemplate.opsForValue().set("answerGroups", json);
+        mStringRedisTemplate.opsForValue().multiSet(answerGroups);
     }
 
  //   public Map<String, AnswerGroup> getAnswerGroups(List<String> groupIds) throws JsonProcessingException {
@@ -120,12 +123,10 @@ public class RedisUtil {
         String json = mStringRedisTemplate.opsForValue().get(groupIDs);
         JSONArray resultMap = new JSONArray();
         if (json != null) {
-            try {
-                List<AnswerGroup> answerGroups = objectMapper.readValue(json, new TypeReference<List<AnswerGroup>>() {});
-                resultMap.put(answerGroups);
-            } catch (JsonProcessingException e) {
-                // Handle exception
-            }
+            //  List<AnswerGroup> answerGroups = objectMapper.readValue(json, new TypeReference<List<AnswerGroup>>() {});
+            List<String> list =mStringRedisTemplate.opsForValue().multiGet(groupIDs);
+            //  List<AnswerGroup> answerGroups =mStringRedisTemplate.opsForValue().multiGet(groupIDs);
+            resultMap.put(list);
         }
         return new JSONArray();
     }

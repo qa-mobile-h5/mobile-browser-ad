@@ -29,8 +29,20 @@
     LIMIT #{startIndex}, 5
   </select>
 
+  <select id="readAnswerGroup" resultMap="answer_group">
+  SELECT *
+  FROM answer_group
+  ORDER BY group_id DESC
+  LIMIT #{startIndex}, 6;
+  </select>
+
   <select id="selectAnswerGroupCount" resultType="java.lang.Integer">
     select count(*)
+    from answer_group
+  </select>
+
+  <select id="selectGroupID" resultType="java.lang.Integer">
+    select group_id
     from answer_group
   </select>
 

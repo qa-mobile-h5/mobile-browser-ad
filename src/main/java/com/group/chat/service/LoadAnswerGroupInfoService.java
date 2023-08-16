@@ -55,11 +55,13 @@ public class LoadAnswerGroupInfoService {
        groups.add(group);
        groups.add(group);
        groups.add(group);
+
+       Map tmp=jsonObject.toMap();
        List<String> qwe= new ArrayList();
        qwe.add("3");
        qwe.add("3");
        qwe.add("3");
-       mRedisUtil.cacheAnswerGroups(groups);
+       mRedisUtil.cacheAnswerGroups(tmp);
        JSONArray jsonarr=mRedisUtil.getAnswerGroups(qwe);
        System.out.println(jsonarr);
         return result;

@@ -14,6 +14,8 @@ public interface AnswerGroupDao {
 
   List<AnswerGroup> selectAnswerGroupList(@Param("startIndex") int startIndex);
 
+  List<AnswerGroup> readAnswerGroup(@Param("startIndex") int startIndex);
+
   void insertAnswerGroup(@Param("group") AnswerGroup group);
 
   void deleteAnswerGroupByGroupID(@Param("groupID") int groupID);
@@ -29,5 +31,7 @@ public interface AnswerGroupDao {
   void updateAnswerGroupListByGroupID(List<AnswerGroup> groups);
 
   void insertAnswerGroupListByGroupID(List<AnswerGroup> groups);
+
+  List<Integer> selectGroupID ();
 
 }
