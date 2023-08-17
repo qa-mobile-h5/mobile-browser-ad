@@ -21,32 +21,60 @@ public class ReadAnswerGroupService {
     @Autowired
     private RedisUtil mRedisUtil;
 
+    static public int x;
+
     @Transactional(rollbackFor = Exception.class)
     public JSONObject readAnswerGroup(int prev_group_id) throws Exception {
-        if (prev_group_id == 0) {
-            prev_group_id = mAnswerGroupDao.selectMaxId();
-        } else {
-            prev_group_id = mAnswerGroupDao.selectPrevId(prev_group_id);
-        }
+        x=prev_group_id;
+
         JSONObject result = new JSONObject();
-        //从缓存中读取6个answergroup，从缓存中intlist中读取6个，并比较最后一位是否相等
-        // if (groupID == intlist<末位>) {
-        // 直接getAnswerGroups
-        // }
-        // else{
-        List<AnswerGroup> groups = mAnswerGroupDao.readAnswerGroup(prev_group_id);
-        //cacheAnswerGroups();
-        // }
-        if (groups.size() <= 5) {
-            //  输出相应数量的数据
-            //  返回结束符
-        } else {
-            //  输出5个数据
-            //  更新prev_group_id
+        List<AnswerGroup> groups = mRedisUtil.getAnswerGroups(prev_group_id);
+
+        List<Integer> idList = mRedisUtil.getDescendingIntList("GroupIDList");
+        System.out.println(mRedisUtil.getAnswerGroup("AnswerGroup::3"));
+        System.out.println(mRedisUtil.getAnswerGroup("AnswerGroup::4"));
+        System.out.println(mRedisUtil.getAnswerGroup("AnswerGroup::5"));
+        if (prev_group_id==0) prev_group_id=idList.size();
+        int f = idList.indexOf(prev_group_id);
+        System.out.println("f:"+f);
+        int sum=0;
+        for (int i=f; i>=0;i--) {
+            sum++;
+            f=idList.indexOf(i);
+            if (sum==6) break;
         }
 
+        int tot = RedisUtil.tot;
+        prev_group_id = RedisUtil.prev;
 
+        System.out.println(prev_group_id);
 
+        System.out.println("tot:"+tot+" prevgroupid:"+prev_group_id+" sum:"+sum+" f"+f);
+        if (tot==sum || prev_group_id==f) {
+            int ifv=0;
+            for (AnswerGroup group:groups) {
+                result.put("AnswerGroup::"+group.getGroupID(),group);
+                ifv++;
+                if (ifv==5) break;
+            }
+            System.out.println(groups);
+        }
+        else {
+            if (x==0) x=idList.size();
+            System.out.println(x);
+            groups = mAnswerGroupDao.readAnswerGroup(idList.size()-x);
+            System.out.println(groups);
+            mRedisUtil.cacheAnswerGroups(groups);
+            int ifv=0;
+            for (AnswerGroup group:groups) {
+                result.put("AnswerGroup::"+group.getGroupID(),group);
+                ifv++;
+                if (ifv==5) break;
+            }
+            System.out.println(result);
+        }
+
+        return result;
 
 
          /*   int tot=0;
@@ -83,6 +111,5 @@ public class ReadAnswerGroupService {
          result.put("err_code", 0);
          result.put("err_msg", "");
             System.out.println(result);*/
-        return result;
     }
 }

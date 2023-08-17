@@ -61,9 +61,9 @@ public class LoadAnswerGroupInfoService {
        qwe.add("3");
        qwe.add("3");
        qwe.add("3");
-       mRedisUtil.cacheAnswerGroups(tmp);
-       JSONArray jsonarr=mRedisUtil.getAnswerGroups(qwe);
-       System.out.println(jsonarr);
+      // mRedisUtil.cacheAnswerGroups(tmp);
+       //JSONArray jsonarr=mRedisUtil.getAnswerGroups(qwe);
+       //System.out.println(jsonarr);
         return result;
     }
 }

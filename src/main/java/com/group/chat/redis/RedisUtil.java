@@ -3,6 +3,7 @@ package com.group.chat.redis;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.group.chat.service.ReadAnswerGroupService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.configurationprocessor.json.JSONArray;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -86,30 +87,12 @@ public class RedisUtil {
 
     public List<Integer> getDescendingIntList(String listKey) {
 
-        String listKey = "GroupIDList";  // zset, 1,2,3,4,5,6...
-        [
-        {
-            "value": "1",
-            "score": 1
-        }
-        {
-            "value": "2",
-            "score": 2,
-        }
-        ...
-        {
-            "value": "6",
-            "score": 6
-        }
-        ]
-
+     //   String listKey = "GroupIDList";  // zset, 1,2,3,4,5,6...
 
         Set<String> set = mStringRedisTemplate.opsForZSet().range(listKey, 0, -1);
-        ["1", "2", "3", ...，"6"];
+    //    ["1", "2", "3", ...，"6"];
 
-
-        mStringRedisTemplate.opsForZSet().add(listKey, "11", 11);
-
+     //   mStringRedisTemplate.opsForZSet().add(listKey, "11", 11);
 
         List<Integer> result = new ArrayList<>();
 
@@ -124,13 +107,13 @@ public class RedisUtil {
 
 
 
-        ZSetOperations<String, String> zSetOperations = mStringRedisTemplate.opsForZSet();
+      /*  ZSetOperations<String, String> zSetOperations = mStringRedisTemplate.opsForZSet();
         Set<String> stringSet = zSetOperations.reverseRange(key, 0, -1);
         List<Integer> intList = new ArrayList<>();
         for (String numStr : stringSet) {
             intList.add(Integer.parseInt(numStr));
-        }
-        return intList;
+        }*/
+       // return intList;
     }
 
   //  public void cacheAnswerGroups(List<AnswerGroup> answerGroups) throws JsonProcessingException {
@@ -142,89 +125,82 @@ public class RedisUtil {
 
     public void cacheAnswerGroups(List<AnswerGroup> answerGroups) throws JsonProcessingException {
         Map<String, String> map = new HashMap<>();
-        String key1 = "AnswerGroup::1";
+       /* String key1 = "AnswerGroup::1";
         String key2 = "AnswerGroup::2";
         String value1 = "{groupID: 1}";
         String value2 = "{groupID: 2}";
         map.put(key1, value1);
-        map.put(key2, value2);
-        mStringRedisTemplate.opsForValue().multiSet(map);
+        map.put(key2, value2);*/
+
+        ZSetOperations<String, String> zSetOperations = mStringRedisTemplate.opsForZSet();
+        for (AnswerGroup group : answerGroups) {
+         //   zSetOperations.add(String.valueOf(group.getGroupID()), String.valueOf(group), group.getGroupID());
+        }
+
 
         for (AnswerGroup group: answerGroups) {
             String key = "AnswerGroup::" + group.getGroupID();
-            String value = jackson();
+            Jackson2JsonRedisSerializer<AnswerGroup> serializer = new Jackson2JsonRedisSerializer<>(AnswerGroup.class);
+            byte[] serializedValue = serializer.serialize(group);
+            String value = new String(serializedValue);
             map.put(key, value);
         }
-
         mStringRedisTemplate.opsForValue().multiSet(map);
 
-        String json = objectMapper.writeValueAsString(answerGroups);
-        mStringRedisTemplate.opsForValue().set("answerGroups", json);
+      //  String json = objectMapper.writeValueAsString(answerGroups);
+      //  mStringRedisTemplate.opsForValue().set("answerGroups", json);
     }
 
- //   public Map<String, AnswerGroup> getAnswerGroups(List<String> groupIds) throws JsonProcessingException {
-  //      Map<String, AnswerGroup> resultMap = new HashMap<>();
-   //     for (String groupId : groupIds) {
-   //         String json = mStringRedisTemplate.opsForValue().get(groupId);
-   //         if (json != null) {
-   //             AnswerGroup answerGroup = objectMapper.readValue(json, AnswerGroup.class);
-  //              resultMap.put(groupId, answerGroup);
-  //          }
-  //      }
-   //     return resultMap;
-  //  }
-
-    public JSONArray getAnswerGroups(List<String> groupIDs) {
-        String json = mStringRedisTemplate.opsForValue().get(groupIDs);
-        JSONArray resultMap = new JSONArray();
-        if (json != null) {
-            try {
-                List<AnswerGroup> answerGroups = objectMapper.readValue(json, new TypeReference<List<AnswerGroup>>() {});
-                resultMap.put(answerGroups);
-            } catch (JsonProcessingException e) {
-                // Handle exception
-            }
+   /* public List<AnswerGroup> getAnswerGroups(List<String> groupIDs) {
+        List<AnswerGroup> result = new ArrayList<>();
+        for (String num : groupIDs) {
+            result.add(getAnswerGroup(num));
         }
-        return new JSONArray();
-    }
+        return result;
+    }*/
 
+   public static int prev,tot;
 
-    public JSONArray getAnswerGroups() {
+   public List<AnswerGroup> getAnswerGroups(Integer prev_group_id) {
         String listkey = "GroupIDList";
         List<Integer> idList = getDescendingIntList(listkey);
 
         List<String> keys = new ArrayList<>();
-        for (int id: idList) {
-            String key = "AnswerGroup::" + id;
+       // int prev_group_id = ReadAnswerGroupService.x;
+        int index ;
+        if (prev_group_id==0) {
+            index=idList.size();
+        }
+        else {
+            index = idList.indexOf(prev_group_id);
+        }
+       System.out.println(index);
+
+        tot=0;
+
+        for (int i=index; i>0; i--) {
+            String key = "AnswerGroup::" + idList.get(i-1);
             keys.add(key);
+            tot++;
+            prev=i-1;
+            if (tot==6) break;
         }
         List<String> values = mStringRedisTemplate.opsForValue().multiGet(keys);
-
         List<AnswerGroup> result = new ArrayList<>();
         for (String value: values) {
-            AnswerGroup group = 反序列化(value);
+            if (value==null) break;
+            Jackson2JsonRedisSerializer<AnswerGroup> serializer = new Jackson2JsonRedisSerializer<>(AnswerGroup.class);
+            byte[] serializedValue = value.getBytes();
+            AnswerGroup group = serializer.deserialize(serializedValue);
             result.add(group);
         }
 
-        Integer.parseInt(str);  "123" -> 123
+   /*   Integer.parseInt(str);  "123" -> 123
         Long.parseLong(str);
         Double.parseDouble(str);
-        Boolean.parseBoolean(str);
+        Boolean.parseBoolean(str);*/
 
         return result;
-
-
-        String json = mStringRedisTemplate.opsForValue().get(groupIDs);
-        JSONArray resultMap = new JSONArray();
-        if (json != null) {
-            try {
-                List<AnswerGroup> answerGroups = objectMapper.readValue(json, new TypeReference<List<AnswerGroup>>() {});
-                resultMap.put(answerGroups);
-            } catch (JsonProcessingException e) {
-                // Handle exception
-            }
-        }
-        return new JSONArray();
     }
 
 

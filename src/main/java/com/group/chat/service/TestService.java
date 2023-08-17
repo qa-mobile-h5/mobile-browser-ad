@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.group.chat.redis.RedisUtil;
 import com.group.chat.entity.AnswerGroup;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -37,11 +38,16 @@ public class TestService{
             int num = tmp.get(i);
             map.put(num,num);
         }
-        System.out.println(map);
-        mRedisUtil.cacheDescendingIntList(map);
-       // mRedisUtil.cacheAnswerGroup("3","");
-      //  AnswerGroup group=mRedisUtil.getAnswerGroup("3");
-       // System.out.println(group);
+     //   System.out.println(map);
+        mRedisUtil.cacheDescendingIntList("GroupIDList",tmp);
+        List<Integer> baga=mRedisUtil.getDescendingIntList("GroupIDList");
+        System.out.println(baga);
+        List<String> ttp=new ArrayList<>();
+        for (Integer num : baga) {
+            ttp.add(String.valueOf(num));
+        }
+        //List<AnswerGroup> bg=mRedisUtil.getAnswerGroups(ttp);
+     //   System.out.println(bg);
     }
 
 }
