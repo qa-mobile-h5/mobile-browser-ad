@@ -174,7 +174,6 @@ public class RedisUtil {
         else {
             index = idList.indexOf(prev_group_id);
         }
-       System.out.println(index);
 
         tot=0;
 
@@ -182,9 +181,10 @@ public class RedisUtil {
             String key = "AnswerGroup::" + idList.get(i-1);
             keys.add(key);
             tot++;
-            prev=i-1;
+            prev=i;
             if (tot==6) break;
         }
+        if (tot==6) prev++;
         List<String> values = mStringRedisTemplate.opsForValue().multiGet(keys);
         List<AnswerGroup> result = new ArrayList<>();
         for (String value: values) {

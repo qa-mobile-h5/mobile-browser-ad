@@ -225,14 +225,12 @@ public class ChatController {
     @ResponseBody
     public  String readAnswerGroup(@RequestBody Map<String, String> requestBody) throws Exception {
         int prev_group_id = Integer.parseInt(requestBody.get("prev_group_id"));
-        JSONObject result;
+        JSONArray result;
         try{
             result= mReadAnswerGroupService.readAnswerGroup(prev_group_id);
             return result.toString();
         }catch (Exception e) {
-            result = new JSONObject();
-            result.put("error_code",1);
-            result.put("err_msg","服务失败");
+            result = new JSONArray();
             e.printStackTrace();
             return result.toString();
         }

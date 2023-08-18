@@ -2,8 +2,8 @@ package com.group.chat.service;
 
 import com.group.chat.dao.AnswerGroupDao;
 import com.group.chat.entity.AnswerGroup;
+import org.json.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.configurationprocessor.json.JSONArray;
 import org.springframework.stereotype.Service;
 import org.json.JSONObject;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,54 +24,48 @@ public class ReadAnswerGroupService {
     static public int x;
 
     @Transactional(rollbackFor = Exception.class)
-    public JSONObject readAnswerGroup(int prev_group_id) throws Exception {
+    public JSONArray readAnswerGroup(int prev_group_id) throws Exception {
         x=prev_group_id;
 
-        JSONObject result = new JSONObject();
+        JSONArray result = new JSONArray();
         List<AnswerGroup> groups = mRedisUtil.getAnswerGroups(prev_group_id);
 
         List<Integer> idList = mRedisUtil.getDescendingIntList("GroupIDList");
-        System.out.println(mRedisUtil.getAnswerGroup("AnswerGroup::3"));
-        System.out.println(mRedisUtil.getAnswerGroup("AnswerGroup::4"));
-        System.out.println(mRedisUtil.getAnswerGroup("AnswerGroup::5"));
         if (prev_group_id==0) prev_group_id=idList.size();
         int f = idList.indexOf(prev_group_id);
-        System.out.println("f:"+f);
+        System.out.println("f"+f);
         int sum=0;
         for (int i=f; i>=0;i--) {
             sum++;
             f=idList.indexOf(i);
-            if (sum==6) break;
+            if (sum==5) break;
         }
-
+        f++;
         int tot = RedisUtil.tot;
         prev_group_id = RedisUtil.prev;
 
-        System.out.println(prev_group_id);
-
-        System.out.println("tot:"+tot+" prevgroupid:"+prev_group_id+" sum:"+sum+" f"+f);
+        System.out.println("f"+f);
+        System.out.println("prev"+prev_group_id);
         if (tot==sum || prev_group_id==f) {
             int ifv=0;
             for (AnswerGroup group:groups) {
-                result.put("AnswerGroup::"+group.getGroupID(),group);
+                result.put(group);
                 ifv++;
                 if (ifv==5) break;
             }
-            System.out.println(groups);
+            if (prev_group_id==0) result.put("查询结束");
         }
         else {
             if (x==0) x=idList.size();
-            System.out.println(x);
             groups = mAnswerGroupDao.readAnswerGroup(idList.size()-x);
-            System.out.println(groups);
             mRedisUtil.cacheAnswerGroups(groups);
             int ifv=0;
             for (AnswerGroup group:groups) {
-                result.put("AnswerGroup::"+group.getGroupID(),group);
+                result.put(group);
                 ifv++;
                 if (ifv==5) break;
             }
-            System.out.println(result);
+            if (f==0) result.put("查询结束");
         }
 
         return result;
