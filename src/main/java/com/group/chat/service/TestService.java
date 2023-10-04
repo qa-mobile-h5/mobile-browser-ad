@@ -22,15 +22,11 @@ public class TestService{
     @Autowired
     private AnswerGroupDao mAnswerGroupDao;
 
-    static int x;
     public TestService(RedisUtil mRedisUtil) {
         this.mRedisUtil = mRedisUtil;
     }
     public void test() {
-     //   mRedisUtil.cacheInt("group_id",3);
-    //    x=mRedisUtil.getInt("group_id");
-     //   System.out.println(x);
-    //    String st;
+
         List<Integer> tmp=mAnswerGroupDao.selectGroupID();
         Map map=new HashMap();
         JSONObject jo=new JSONObject();
@@ -38,7 +34,6 @@ public class TestService{
             int num = tmp.get(i);
             map.put(num,num);
         }
-     //   System.out.println(map);
         mRedisUtil.cacheDescendingIntList("GroupIDList",tmp);
         List<Integer> baga=mRedisUtil.getDescendingIntList("GroupIDList");
         System.out.println(baga);
@@ -46,8 +41,6 @@ public class TestService{
         for (Integer num : baga) {
             ttp.add(String.valueOf(num));
         }
-        //List<AnswerGroup> bg=mRedisUtil.getAnswerGroups(ttp);
-     //   System.out.println(bg);
     }
 
 }

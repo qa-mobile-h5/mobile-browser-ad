@@ -1,12 +1,8 @@
 package com.group.chat;
 
 import com.group.chat.entity.AnswerGroup;
-import java.util.ArrayList;
 
 import org.json.JSONArray;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import java.util.HashMap;
 import com.group.chat.service.LoadAnswerGroupInfoService;
 import com.group.chat.service.LoadAnswerGroupListService;
 import com.group.chat.service.InsertIntoAnswerGroupService;
@@ -20,7 +16,6 @@ import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.group.chat.dao.AnswerGroupDao;
 import com.group.chat.service.TestService;
 
@@ -61,25 +56,6 @@ public class ChatController {
     @Autowired
     private ReadAnswerGroupService mReadAnswerGroupService;
 
-  /*  @RequestMapping(value = "/load_answer_group_info", method = {RequestMethod.GET, RequestMethod.POST})
-    @ResponseBody
-    public ResponseEntity<ServiceResult<Object>> loadAnswerGroupInfo(@RequestBody Map<String, String> requestBody) {
-        ServiceResult<Object> result = new ServiceResult<>();
-        try {
-            int groupID = Integer.parseInt(requestBody.get("group_id"));
-            JSONObject jsonObject = mLoadAnswerGroupInfoService.loadAnswerGroupInfo(groupID);
-            result.setResult(jsonObject.toString());
-            result.setErr_code(0);
-            result.setErr_msg("");
-            return ResponseEntity.ok().body(result);
-        } catch (Exception e) {
-            result.setResult(null);
-            result.setErr_code(1);
-            result.setErr_msg("服务失败");
-            e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(result);
-        }
-    }*/
   @RequestMapping(value = "/load_answer_group_info", method = {RequestMethod.GET, RequestMethod.POST})
   @ResponseBody
   public String loadAnswerGroupInfo(@RequestBody Map<String, String> requestBody) throws Exception {
@@ -87,7 +63,6 @@ public class ChatController {
       JSONObject result;
       try {
           result = mLoadAnswerGroupInfoService.loadAnswerGroupInfo(groupID);
-         // System.out.println("Received group_id: " + result);
           return result.toString();
       }catch (Exception e) {
           result = new JSONObject();
@@ -122,8 +97,6 @@ public class ChatController {
         int groupID = Integer.parseInt(requestBody.get("group_id"));
         JSONObject result;
         try {
-            //result = mDeleteFromAnswerGroupService.deleteFromAnswerGroup(groupID);
-           // return result.toString();
             return mDeleteFromAnswerGroupService.executeService(mDeleteFromAnswerGroupService.readAndParseParams(requestBody));
         } catch (Exception e) {
             result = new JSONObject();
@@ -198,7 +171,6 @@ public class ChatController {
             return result.toString();
         }
 
-
     }
 
     @Autowired
@@ -253,50 +225,11 @@ public class ChatController {
             return result.toString();
         }
     }
-    /*    int tot=0;
-        int prev_group_id = Integer.parseInt(requestBody.get("prev_group_id"));
-        JSONArray AnswerGroups = new JSONArray();
-        while (prev_group_id!=-1&&tot<5) {
-            tot++;
-            if (prev_group_id==0) {
-                prev_group_id=mAnswerGroupDao.selectMaxId();
-            }
-            else {
-                prev_group_id=mAnswerGroupDao.selectPrevId(prev_group_id);
-            }
-
-            try {
-                ServiceResult<Object> tmp = mLoadAnswerGroupInfoService.loadAnswerGroupInfo(prev_group_id);
-                JSONObject jsonObject = mAnswerGroupDao.selectAnswerGroupByGroupID(prev_group_id).serialize();
-                AnswerGroups.put(jsonObject);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-        if (prev_group_id ==0) {
-            prev_group_id=-1;
-        }
-
-        JSONObject result = new JSONObject();
-        result.put("AnswerGroups", AnswerGroups);
-        result.put("prev_group_id", prev_group_id);
-       // ResponseEntity.status(HttpStatus.OK).body(AnswerGroups.toString());
-        return result.toString();
-       //return new AnswerGroupListWithInt(AnswerGroups,tot);
-
-     */
-
-//    @RequestMapping(value = "/load_answer_group_list", method ={RequestMethod.GET, RequestMethod.POST})
- //   @ResponseBody
- //   public void loadAnswerGroupList(@RequestParam int startIndex, @RequestParam int batchSize) {
- //       mLoadAnswerGroupListService.loadAnswerGroupList(startIndex, batchSize);
- //  }
 
     @RequestMapping(value = "/load_answer_group_list", method ={RequestMethod.GET, RequestMethod.POST})
     @ResponseBody
     public String loadAnswerGroupList(@RequestBody Map<String, Integer> requestBody) {
         int startIndex = requestBody.get("startIndex");
-    //    int batchSize = requestBody.get("batchSize");
         JSONObject result;
         try{
             result= mLoadAnswerGroupListService.loadAnswerGroupList(startIndex);
@@ -312,16 +245,4 @@ public class ChatController {
 
     }
 
-
-//    @ResponseBody
- //   public String loadAnswerGroupList(@RequestParam("startIndex")int startIndex, @RequestParam("startIndex") int batchSize) {
- //      = mLoadAnswerGroupListService.loadAnswerGroupList(startIndex,batchSize);
-  //  }
-
-//    @RequestMapping(value = "/load_answer_group_list", method = {RequestMethod.GET, RequestMethod.POST})
-//    @ResponseBody
-//    public String loadAnswerGroupList() {
-//        String answerGroupList = loadAnswerGroupListService.getAnswerGroupList();
-//        return answerGroupList;
-//    }
 }

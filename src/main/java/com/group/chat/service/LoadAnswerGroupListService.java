@@ -22,6 +22,5 @@ public class LoadAnswerGroupListService {
         result.put("err_code", 0);
         result.put("err_msg", "");
         return result;
-       // return mAnswerGroupDao.selectAnswerGroupList(startIndex, batchSize);
     }
 }

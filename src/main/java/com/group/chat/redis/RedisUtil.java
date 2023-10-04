@@ -1,14 +1,9 @@
 package com.group.chat.redis;
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.group.chat.service.ReadAnswerGroupService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.configurationprocessor.json.JSONArray;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
-import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.stereotype.Component;
@@ -22,14 +17,11 @@ public class RedisUtil {
     @Autowired
     private StringRedisTemplate mStringRedisTemplate;
     private ObjectMapper objectMapper;
-   // @Autowired
- //   private final RedisTemplate<String, AnswerGroup> redisTemplate;
 
 
     public RedisUtil(StringRedisTemplate stringRedisTemplate,ObjectMapper objectMapper) {
         this.mStringRedisTemplate = stringRedisTemplate;
         this.objectMapper = objectMapper;
-     //   this.redisTemplate= redisTemplate;
     }
 
     public void cacheString(String key, String value) {
@@ -65,8 +57,6 @@ public class RedisUtil {
         byte[] serializedValue = serializer.serialize(answerGroup);
         String value = new String(serializedValue);
         mStringRedisTemplate.opsForValue().set(key, value);
-       // String key = "answerGroup:" + answerGroup.getGroupID();
-      //  mStringRedisTemplate.opsForValue().set(key, answerGroup.serialize());
     }
 
     public AnswerGroup getAnswerGroup(String groupID) {
@@ -87,12 +77,8 @@ public class RedisUtil {
 
     public List<Integer> getDescendingIntList(String listKey) {
 
-     //   String listKey = "GroupIDList";  // zset, 1,2,3,4,5,6...
 
         Set<String> set = mStringRedisTemplate.opsForZSet().range(listKey, 0, -1);
-    //    ["1", "2", "3", ...，"6"];
-
-     //   mStringRedisTemplate.opsForZSet().add(listKey, "11", 11);
 
         List<Integer> result = new ArrayList<>();
 
@@ -102,35 +88,12 @@ public class RedisUtil {
             int i = Integer.parseInt(value);
             result.add(i);
         }
-        // 1 2 3 4 5 6
         return result;
 
-
-
-      /*  ZSetOperations<String, String> zSetOperations = mStringRedisTemplate.opsForZSet();
-        Set<String> stringSet = zSetOperations.reverseRange(key, 0, -1);
-        List<Integer> intList = new ArrayList<>();
-        for (String numStr : stringSet) {
-            intList.add(Integer.parseInt(numStr));
-        }*/
-       // return intList;
     }
-
-  //  public void cacheAnswerGroups(List<AnswerGroup> answerGroups) throws JsonProcessingException {
-   //     for (AnswerGroup group : answerGroups) {
-   //         String json = objectMapper.writeValueAsString(group);
-  //          mStringRedisTemplate.opsForHash().put("answerGroups", group.getGroupID(), json);
-  //      }
-   // }
 
     public void cacheAnswerGroups(List<AnswerGroup> answerGroups) throws JsonProcessingException {
         Map<String, String> map = new HashMap<>();
-       /* String key1 = "AnswerGroup::1";
-        String key2 = "AnswerGroup::2";
-        String value1 = "{groupID: 1}";
-        String value2 = "{groupID: 2}";
-        map.put(key1, value1);
-        map.put(key2, value2);*/
 
         ZSetOperations<String, String> zSetOperations = mStringRedisTemplate.opsForZSet();
         for (AnswerGroup group : answerGroups) {
@@ -147,17 +110,8 @@ public class RedisUtil {
         }
         mStringRedisTemplate.opsForValue().multiSet(map);
 
-      //  String json = objectMapper.writeValueAsString(answerGroups);
-      //  mStringRedisTemplate.opsForValue().set("answerGroups", json);
     }
 
-   /* public List<AnswerGroup> getAnswerGroups(List<String> groupIDs) {
-        List<AnswerGroup> result = new ArrayList<>();
-        for (String num : groupIDs) {
-            result.add(getAnswerGroup(num));
-        }
-        return result;
-    }*/
 
    public static int prev,tot;
 
@@ -166,7 +120,6 @@ public class RedisUtil {
         List<Integer> idList = getDescendingIntList(listkey);
 
         List<String> keys = new ArrayList<>();
-       // int prev_group_id = ReadAnswerGroupService.x;
         int index ;
         if (prev_group_id==0) {
             index=idList.size();
@@ -195,21 +148,10 @@ public class RedisUtil {
             result.add(group);
         }
 
-   /*   Integer.parseInt(str);  "123" -> 123
-        Long.parseLong(str);
-        Double.parseDouble(str);
-        Boolean.parseBoolean(str);*/
 
         return result;
     }
 
-
-    /**
-     * 判断当前Redis缓存中是否有Key
-     *
-     * @param key
-     * @return
-     */
     public boolean hasKey(String key) {
         Boolean has = mStringRedisTemplate.hasKey(key);
         return has != null && has;
